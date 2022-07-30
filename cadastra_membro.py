@@ -91,5 +91,5 @@ print(cursor.rowcount, 'Registro inserido com sucesso.\n')
 cursor.close()
 
 
-import menu_cadastro
+import menu_principal
 

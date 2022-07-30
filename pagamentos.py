@@ -9,6 +9,20 @@ from datetime import datetime
 con = mysql.connector.connect(host='localhost', database='templarios', user='root', password='Janete4353')
 #inclui pagamento
 data_movimento = input('Digite a data do movimento. ')
+try:
+	if len(data_movimento) != 8:
+		raise ValueError
+	else:
+		data_formatada = '{}/{}/{}'.format(data_movimento[0:2],
+												   data_movimento[2:4], data_movimento[4:])
+		print(data_formatada)
+
+except ValueError:
+	if len(data_movimento) == 0:
+		print('Você não digitou a data')
+	else:
+		print('A data está incorreta, ela deve ter 8 digitos')
+
 historico = input('Digite o histórico do movimento')
 valor = float(input('Digite o valor da movimentação. '))
 data_lancamento = datetime.today().strftime('%d-%m-%y')
@@ -16,11 +30,10 @@ inserir = """INSERT INTO pagar
 					( data_movimento, historico, valor, data_lancamento) 
 					values (%s, %s, %s, %s);						
 					"""
-sql_data = (data_movimento, historico, valor, data_lancamento)
+sql_data = (data_formatada, historico, valor, data_lancamento)
 cursor = con.cursor()
 cursor.execute(inserir,sql_data)
 con.commit()
-
 #soma e atualiza saldo parcial de pagamentos
 consulta_sql = "SELECT SUM(valor) FROM pagar "
 cursor = con.cursor()
